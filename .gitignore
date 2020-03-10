@@ -1,0 +1,7 @@
+*.iml
+.gradle
+.idea
+out
+
+# file is to big for git
+ortools.lib
