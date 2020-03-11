@@ -6,12 +6,14 @@ package de.seibushin.nutrigo.proposer;/* ***************************************
 import com.google.ortools.sat.CpModel;
 import com.google.ortools.sat.CpSolver;
 import com.google.ortools.sat.CpSolverSolutionCallback;
+import com.google.ortools.sat.CpSolverStatus;
 import com.google.ortools.sat.IntVar;
 import com.google.ortools.sat.LinearExpr;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class Optimizer {
 	static {
@@ -29,8 +31,22 @@ public class Optimizer {
 
 	public List<Food> foods = new ArrayList<>();
 
+	public void setContraints(int kcal, int fat, int carbs, int protein) {
+		kcalmin = (int) (kcal * 0.9);
+		kcalmax = (int) (kcal * 1.1);
+		fatmin = (int) (fat * 0.9);
+		fatmax = (int) (fat * 1.1);
+		carbsmin = (int) (carbs * 0.9);
+		carbsmax = (int) (carbs * 1.1);
+		proteinmin = (int) (protein * 0.9);
+		proteinmax = (int) (protein * 1.1);
+	}
+
 	public void optimize() {
-		System.out.println(kcalmin + " - " + kcalmax);
+		System.out.println("KCAL: " + kcalmin + " - " + kcalmax);
+		System.out.println("FAT: " + fatmin + " - " + fatmax);
+		System.out.println("CARBS: " + carbsmin + " - " + carbsmax);
+		System.out.println("PROTEIN: " + proteinmin + " - " + proteinmax);
 
 		CpModel model = new CpModel();
 		IntVar fat = model.newIntVar(0, 10000, "fat");
@@ -73,6 +89,8 @@ public class Optimizer {
 			variableArray.addAll(Arrays.asList(variables));
 		}
 
+
+
 		@Override
 		public void onSolutionCallback() {
 			System.out.printf("Solution #%d: time = %.02f s%n", solutionCount, wallTime());
@@ -93,6 +111,11 @@ public class Optimizer {
 				}
 			}
 			solutionCount++;
+			System.out.println("Next solution?(y/n)");
+			Scanner scanner = new Scanner(System.in);
+			if (scanner.next().equals("n")) {
+				stopSearch();
+			}
 		}
 
 		public int getSolutionCount() {

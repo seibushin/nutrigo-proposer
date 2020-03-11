@@ -69,11 +69,11 @@ public class Database {
 					double total = rs2.getInt("total");
 					food.dailyMax = (int) Math.ceil(total / portion);
 				} catch (SQLException e1) {
-					System.out.println("No data available - dailyMax=1");
+//					System.out.println("No data available - dailyMax=1");
 				}
 
 				foods.add(food);
-				System.out.println(food);
+//				System.out.println(food);
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
