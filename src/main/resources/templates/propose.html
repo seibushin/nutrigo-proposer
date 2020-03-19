@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Nutrigo</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+<div id="main-content" class="container">
+    <header th:include="../fragments/header.html :: header"></header>
+    <form action="#" th:action="@{/propose}" method="post">
+        <div class="row">
+            <div class="col-md-2">
+                <input type="number" class="form-control" name="kcal" th:value="${kcal}" placeholder="Kcal">
+            </div>
+            <div class="col-md-2">
+                <input type="number" class="form-control" name="fat" th:value="${fat}" placeholder="Fat">
+            </div>
+            <div class="col-md-2">
+                <input type="number" class="form-control" name="carbs" th:value="${carbs}" placeholder="Carbs">
+            </div>
+            <div class="col-md-2">
+                <input type="number" class="form-control" name="protein" th:value="${protein}" placeholder="Protein">
+            </div>
+            <div class="col-md-2">
+                <input type="number" class="form-control" name="meals" th:value="${meals}" placeholder="Meals>">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+
+
+    <h1>FOODS</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Propose Max</th>
+            <th>Daily Max</th>
+            <th>Kcal</th>
+            <th>Fat</th>
+            <th>Carbs</th>
+            <th>Protein</th>
+            <th>Weight</th>
+            <th>Serving</th>
+        </tr>
+        </thead>
+        <tr th:each="nu: ${nus}">
+            <td th:text="${nu.id}"></td>
+            <td th:text="${nu.name}"></td>
+            <td th:text="${#numbers.formatDecimal(nu.kcal, 1, 1)}"></td>
+            <td th:text="${#numbers.formatDecimal(nu.fat, 1, 1)}"></td>
+            <td th:text="${#numbers.formatDecimal(nu.carbs, 1,1)}"></td>
+            <td th:text="${#numbers.formatDecimal(nu.protein, 1, 1)}"></td>
+            <td th:text="${nu.weight}"></td>
+            <td th:text="${nu.serving}"></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

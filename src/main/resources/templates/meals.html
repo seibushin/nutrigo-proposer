@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Nutrigo</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="/webjars/bootstrap-table/bootstrap-table.css" rel="stylesheet">
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/bootstrap-table/bootstrap-table.js"></script>
+</head>
+<body>
+<div id="main-content" class="container">
+    <header th:include="../fragments/header.html :: header"></header>
+    <h1>MEALS</h1>
+    <table class="table table-hover" data-toggle="table" data-classes="table table-hover" data-search="true">
+        <thead>
+        <tr>
+            <th data-sortable="true">ID</th>
+            <th data-sortable="true">Name</th>
+            <th data-sortable="true" data-searchable="false">Propose Max</th>
+            <th data-sortable="true" data-searchable="false">Daily Max</th>
+            <th data-sortable="true" data-searchable="false">Kcal</th>
+            <th data-sortable="true" data-searchable="false">Fat</th>
+            <th data-sortable="true" data-searchable="false">Carbs</th>
+            <th data-sortable="true" data-searchable="false">Protein</th>
+            <th data-sortable="true" data-searchable="false">Weight</th>
+            <th data-sortable="true" data-searchable="false">Serving</th>
+        </tr>
+        </thead>
+        <tr th:each="meal: ${meals}">
+            <td th:text="${meal.id}">name</td>
+            <td th:text="${meal.name}">name</td>
+            <td><input type="number" th:value="*{meal.propose}"/></td>
+            <td th:text="${meal.dailyMax}">name</td>
+            <td th:text="${#numbers.formatDecimal(meal.kcal, 1, 1, 'POINT')}">name</td>
+            <td th:text="${#numbers.formatDecimal(meal.fat, 1, 1, 'POINT')}">name</td>
+            <td th:text="${#numbers.formatDecimal(meal.carbs, 1,1, 'POINT')}">name</td>
+            <td th:text="${#numbers.formatDecimal(meal.protein, 1, 1, 'POINT')}">name</td>
+            <td th:text="${meal.weight}">name</td>
+            <td th:text="${meal.serving}">name</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

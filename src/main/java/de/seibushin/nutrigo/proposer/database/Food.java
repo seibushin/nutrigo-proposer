@@ -1,9 +1,10 @@
-package de.seibushin.nutrigo.proposer;/* ***************************************************
+package de.seibushin.nutrigo.proposer.database;/* ***************************************************
  * Created by Sebastian Meyer (s.meyer@seibushin.de)
  * (2020-01-27)
  * ***************************************************/
 
-public class Food {
+public class Food implements NutritionUnit {
+	public int id;
 	public double fat;
 	public double protein;
 	public double carbs;
@@ -12,8 +13,11 @@ public class Food {
 	public int dailyMax;
 	public double portion;
 	public double weight;
+	public double propose;
+	public boolean portionize = true;
 
-	public Food(String name, double kcal, double fat, double carbs, double protein, double portion, double weight, int dailyMax) {
+	public Food(int id, String name, double kcal, double fat, double carbs, double protein, double portion, double weight, int dailyMax, double propose) {
+		this.id = id;
 		this.name = name;
 		this.fat = fat;
 		this.kcal = kcal;
@@ -22,6 +26,7 @@ public class Food {
 		this.portion = portion;
 		this.weight = weight;
 		this.dailyMax = dailyMax;
+		this.propose = propose;
 	}
 
 	public double getCarbs() {
@@ -36,18 +41,61 @@ public class Food {
 		return portionize(protein);
 	}
 
+	@Override
+	public int getId() {
+		return id;
+	}
+
+	@Override
+	public String getType() {
+		return "FOOD";
+	}
+
+	@Override
+	public double getServing() {
+		if (portionize) {
+			return portion;
+		}
+		return weight;
+	}
+
+	@Override
+	public double getWeight() {
+		return weight;
+	}
+
+	@Override
+	public double getPropose() {
+		return propose;
+	}
+
 	public double getKcal() {
 		return portionize(kcal);
 	}
 
-	public double portionize(double val) {
-		return val * portion / weight;
+	@Override
+	public int dailyMax() {
+		return dailyMax;
 	}
+
+	@Override
+	public String name() {
+		return name;
+	}
+
+	public double portionize(double val) {
+		if (portionize) {
+			return val * portion / weight;
+		}
+		return val;
+	}
+
 
 	@Override
 	public String toString() {
 		return "Food{" +
-				"name='" + name + '\'' +
+				"id='" + id + '\'' +
+				", name='" + name + '\'' +
 				", kcal=" + getKcal() +
 				", fat=" + getFat() +
 				", protein=" + getProtein() +
