@@ -1,15 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <title>Hello WebSocket</title>
-    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="/webjars/jquery/jquery.min.js"></script>
+<head th:include="../fragments/header.html :: head">
+    <title>Nutrigo</title>
 </head>
 <body>
 <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
     enabled. Please enable Javascript and reload this page!</h2></noscript>
 <div id="main-content" class="container">
     <header th:include="../fragments/header.html :: header"></header>
+    <div th:if="${message}">
+        <div class="alert-info" th:text="${message}"/>
+    </div>
+    <div>
+        <form method="POST" enctype="multipart/form-data" action="/upload">
+            <div>Upload new database</div>
+            <div>
+                <input type="file" name="file" />
+                <input type="submit" value="Upload" />
+            </div>
+        </form>
+    </div>
     <h1>Plans</h1>
     <div class="row">
         <div class="col-md-6">

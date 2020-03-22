@@ -10,7 +10,7 @@ public class Food implements NutritionUnit {
 	public double carbs;
 	public double kcal;
 	public String name;
-	public int dailyMax;
+	public double dailyMax;
 	public double portion;
 	public double weight;
 	public double propose;
@@ -74,7 +74,7 @@ public class Food implements NutritionUnit {
 	}
 
 	@Override
-	public int dailyMax() {
+	public double dailyMax() {
 		return dailyMax;
 	}
 

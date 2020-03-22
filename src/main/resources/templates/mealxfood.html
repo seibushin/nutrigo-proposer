@@ -1,0 +1,28 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<table class="table table-sm">
+    <thead>
+    <tr>
+        <th data-sortable="true">ID</th>
+        <th data-sortable="true">Name</th>
+        <th data-sortable="true">Kcal</th>
+        <th data-sortable="true">Fat</th>
+        <th data-sortable="true">Carbs</th>
+        <th data-sortable="true">Protein</th>
+        <th data-sortable="true">Serving</th>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="food: ${foods}">
+        <tr>
+            <td th:text="${food.id}">name</td>
+            <td th:text="${food.name}">name</td>
+            <td th:text="${#numbers.formatDecimal(food.kcal, 1, 1, 'POINT')}">name</td>
+            <td th:text="${#numbers.formatDecimal(food.fat, 1, 1, 'POINT')}">name</td>
+            <td th:text="${#numbers.formatDecimal(food.carbs, 1,1, 'POINT')}">name</td>
+            <td th:text="${#numbers.formatDecimal(food.protein, 1, 1, 'POINT')}">name</td>
+            <td th:text="${food.serving}">name</td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+</html>

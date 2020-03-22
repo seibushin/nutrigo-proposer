@@ -61,7 +61,7 @@ public class Optimizer {
 		IntVar[] used = new IntVar[nus.size()];
 		for (int i = 0; i < nus.size(); i++) {
 			NutritionUnit nu = nus.get(i);
-			used[i] = model.newIntVar(0, nu.dailyMax(), nu.getType() + nu.getId());
+			used[i] = model.newIntVar(0, (int) Math.ceil(nu.getPropose()), nu.getType() + nu.getId());
 		}
 
 		model.addEquality(fat, LinearExpr.scalProd(used, nus.stream().mapToInt(f -> (int) (f.getFat() * 10)).toArray()));

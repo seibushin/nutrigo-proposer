@@ -1,19 +1,18 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:include="../fragments/header.html :: head">
     <title>Nutrigo</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="/webjars/bootstrap-table/bootstrap-table.css" rel="stylesheet">
-    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/main.css" rel="stylesheet">
-    <script src="/webjars/jquery/jquery.min.js"></script>
-    <script src="/webjars/bootstrap-table/bootstrap-table.js"></script>
 </head>
 <body>
 <div id="main-content" class="container">
     <header th:include="../fragments/header.html :: header"></header>
-    <h1>MEALS</h1>
-    <table class="table table-hover" data-toggle="table" data-classes="table table-hover" data-search="true">
+    <h1>MEALS <span th:if="${portionize}">(Portionized)</span></h1>
+    <a th:href="'?portionize='+${!portionize}">
+        <span th:if="${!portionize}">Portionize</span>
+        <span th:if="${portionize}">Unportionize</span>
+    </a>
+    <table id="nus" class="table table-hover" data-toggle="table" data-classes="table table-hover" data-search="true"
+           data-detail-view="true">
         <thead>
         <tr>
             <th data-sortable="true">ID</th>
@@ -28,19 +27,35 @@
             <th data-sortable="true" data-searchable="false">Serving</th>
         </tr>
         </thead>
-        <tr th:each="meal: ${meals}">
-            <td th:text="${meal.id}">name</td>
-            <td th:text="${meal.name}">name</td>
-            <td><input type="number" th:value="*{meal.propose}"/></td>
-            <td th:text="${meal.dailyMax}">name</td>
-            <td th:text="${#numbers.formatDecimal(meal.kcal, 1, 1, 'POINT')}">name</td>
-            <td th:text="${#numbers.formatDecimal(meal.fat, 1, 1, 'POINT')}">name</td>
-            <td th:text="${#numbers.formatDecimal(meal.carbs, 1,1, 'POINT')}">name</td>
-            <td th:text="${#numbers.formatDecimal(meal.protein, 1, 1, 'POINT')}">name</td>
-            <td th:text="${meal.weight}">name</td>
-            <td th:text="${meal.serving}">name</td>
-        </tr>
+        <tbody>
+        <th:block th:each="meal: ${meals}">
+            <tr th:id="meal+${meal.id}">
+                <td th:text="${meal.id}">name</td>
+                <td>
+                    <span th:text="${meal.name}">name</span>
+                </td>
+                <td><input type="number" th:value="*{meal.propose}"/></td>
+                <td th:text="${meal.dailyMax}">name</td>
+                <td th:text="${#numbers.formatDecimal(meal.kcal, 1, 1, 'POINT')}">name</td>
+                <td th:text="${#numbers.formatDecimal(meal.fat, 1, 1, 'POINT')}">name</td>
+                <td th:text="${#numbers.formatDecimal(meal.carbs, 1,1, 'POINT')}">name</td>
+                <td th:text="${#numbers.formatDecimal(meal.protein, 1, 1, 'POINT')}">name</td>
+                <td th:text="${meal.weight}">name</td>
+                <td th:text="${meal.serving}">name</td>
+            </tr>
+        </th:block>
+        </tbody>
     </table>
+
+    <script>
+        var $table = $('#nus')
+        $table.on('expand-row.bs.table', function (e, index, row, $detail) {
+            $detail.html('Loading foods...');
+            $.get('mealxfood/' + row[0], function (res) {
+                $detail.html(res);
+            });
+        });
+    </script>
 </div>
 </body>
 </html>

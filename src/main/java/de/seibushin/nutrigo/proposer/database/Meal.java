@@ -9,7 +9,7 @@ import java.util.List;
 public class Meal implements NutritionUnit {
 	public int id;
 	public String name;
-	public int dailyMax;
+	public double dailyMax;
 	public double propose;
 	public double portion = 1;
 	public double weight;
@@ -71,7 +71,7 @@ public class Meal implements NutritionUnit {
 	}
 
 	@Override
-	public int dailyMax() {
+	public double dailyMax() {
 		return dailyMax;
 	}
 

@@ -1,19 +1,16 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org"
-      lang="en">
-<head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:include="../fragments/header.html :: head">
     <title>Nutrigo</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="/webjars/bootstrap-table/bootstrap-table.css" rel="stylesheet">
-    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/main.css" rel="stylesheet">
-    <script src="/webjars/jquery/jquery.min.js"></script>
-    <script src="/webjars/bootstrap-table/bootstrap-table.js"></script>
 </head>
 <body>
 <div id="main-content" class="container">
     <header th:include="../fragments/header.html :: header"></header>
-    <h1>FOODS</h1>
+    <h1>FOODS <span th:if="${portionize}">(Portionized)</span></h1>
+    <a th:href="'?portionize='+${!portionize}">
+        <span th:if="${!portionize}">Portionize</span>
+        <span th:if="${portionize}">Unportionize</span>
+    </a>
     <table class="table table-hover" data-toggle="table" data-classes="table table-hover" data-search="true">
         <thead>
         <tr>

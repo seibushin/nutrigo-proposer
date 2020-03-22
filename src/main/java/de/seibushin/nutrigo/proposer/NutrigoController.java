@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -23,22 +24,30 @@ public class NutrigoController {
 		return "redirect:/plan";
 	}
 
+	@GetMapping("/mealxfood/*")
+	public String test(final HttpServletRequest request, Model model) {
+		final String url = request.getRequestURI();
+		final int id = Integer.parseInt(url.replaceAll("/mealxfood/(\\d+)", "$1"));
+		model.addAttribute("foods", Database.getInstance().getMeal(id).foods);
+		return "mealxfood";
+	}
+
 	@GetMapping("/plan")
 	public String plan(Model model) throws Exception {
 		return "plan";
 	}
 
 	@GetMapping("/foods")
-	public String foods(@RequestParam(name = "portionize", required = false, defaultValue = "true") String portionize, Model model) throws Exception {
-		Boolean portion = Boolean.parseBoolean(portionize);
-		model.addAttribute("foods", Database.getInstance().getFoods(portion));
+	public String foods(@RequestParam(name = "portionize", required = false, defaultValue = "true") Boolean portionize, Model model) throws Exception {
+		model.addAttribute("foods", Database.getInstance().getFoods(portionize));
+		model.addAttribute("portionize", portionize);
 		return "foods";
 	}
 
 	@GetMapping("/meals")
-	public String meals(@RequestParam(name = "portionize", required = false, defaultValue = "true") String portionize, Model model) throws Exception {
-		Boolean portion = Boolean.parseBoolean(portionize);
-		model.addAttribute("meals", Database.getInstance().getMeals(portion));
+	public String meals(@RequestParam(name = "portionize", required = false, defaultValue = "true") Boolean portionize, Model model) throws Exception {
+		model.addAttribute("meals", Database.getInstance().getMeals(portionize));
+		model.addAttribute("portionize", portionize);
 		return "meals";
 	}
 

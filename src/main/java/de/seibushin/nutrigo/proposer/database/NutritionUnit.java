@@ -5,7 +5,7 @@
 package de.seibushin.nutrigo.proposer.database;
 
 public interface NutritionUnit {
-	int dailyMax();
+	double dailyMax();
 
 	String name();
 
