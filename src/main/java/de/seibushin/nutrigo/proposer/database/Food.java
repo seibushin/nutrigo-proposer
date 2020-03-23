@@ -8,6 +8,7 @@ public class Food implements NutritionUnit {
 	public double fat;
 	public double protein;
 	public double carbs;
+	public double sugar;
 	public double kcal;
 	public String name;
 	public double dailyMax;
@@ -16,13 +17,14 @@ public class Food implements NutritionUnit {
 	public double propose;
 	public boolean portionize = true;
 
-	public Food(int id, String name, double kcal, double fat, double carbs, double protein, double portion, double weight, int dailyMax, double propose) {
+	public Food(int id, String name, double kcal, double fat, double carbs, double sugar, double protein, double portion, double weight, int dailyMax, double propose) {
 		this.id = id;
 		this.name = name;
 		this.fat = fat;
 		this.kcal = kcal;
 		this.protein = protein;
 		this.carbs = carbs;
+		this.sugar = sugar;
 		this.portion = portion;
 		this.weight = weight;
 		this.dailyMax = dailyMax;
@@ -31,6 +33,11 @@ public class Food implements NutritionUnit {
 
 	public double getCarbs() {
 		return portionize(carbs);
+	}
+
+	@Override
+	public double getSugar() {
+		return portionize(sugar);
 	}
 
 	public double getFat() {

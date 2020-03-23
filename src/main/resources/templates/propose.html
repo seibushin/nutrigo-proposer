@@ -28,35 +28,47 @@
             </div>
         </div>
     </form>
+    <button id="use_profile" class="btn btn-primary">Use Profile</button>
 
 
-    <h1>FOODS</h1>
-    <table>
+    <h1>Nutrition</h1>
+    <table id="nus" class="table table-hover" data-toggle="table" data-classes="table table-hover" data-detail-view="true" data-detail-filter="detailFilter">
         <thead>
         <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Propose Max</th>
-            <th>Daily Max</th>
             <th>Kcal</th>
             <th>Fat</th>
             <th>Carbs</th>
+            <th>Sugar</th>
             <th>Protein</th>
-            <th>Weight</th>
             <th>Serving</th>
         </tr>
         </thead>
-        <tr th:each="nu: ${nus}">
+        <tr th:class="${nu.getType()}" th:each="nu: ${nus}">
             <td th:text="${nu.id}"></td>
             <td th:text="${nu.name}"></td>
             <td th:text="${#numbers.formatDecimal(nu.kcal, 1, 1)}"></td>
             <td th:text="${#numbers.formatDecimal(nu.fat, 1, 1)}"></td>
             <td th:text="${#numbers.formatDecimal(nu.carbs, 1,1)}"></td>
+            <td th:text="${#numbers.formatDecimal(nu.sugar, 1,1)}"></td>
             <td th:text="${#numbers.formatDecimal(nu.protein, 1, 1)}"></td>
-            <td th:text="${nu.weight}"></td>
             <td th:text="${nu.serving}"></td>
         </tr>
     </table>
 </div>
+<script>
+    var $table = $('#nus')
+    $table.on('expand-row.bs.table', function (e, index, row, $detail) {
+        $detail.html('Loading foods...');
+        $.get('mealxfood/' + row[0], function (res) {
+            $detail.html(res);
+        });
+    });
+
+    function detailFilter(index, row) {
+        return row._class == "MEAL";
+    }
+</script>
 </body>
 </html>

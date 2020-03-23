@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Optimizer {
-//	static {
-//		System.loadLibrary("jniortools");
-//	}
+	static {
+		System.loadLibrary("jniortools");
+	}
 
 	public int fatmin = 60;
 	public int fatmax = 100;
@@ -83,13 +83,14 @@ public class Optimizer {
 		CpSolver solver = new CpSolver();
 		solver.getParameters().setMaxTimeInSeconds(30);
 		Callback cb = new Callback(used, fat, carbs, protein, kcal);
-		System.out.println("HDFSDF");
 		solver.searchAllSolutions(model, cb);
 
 		List<NutritionUnit> nus = new ArrayList<>();
 
-		String ids = "(" + cb.getFoodID().stream().map(integer -> "" + integer).collect(Collectors.joining(", ")) + ")";
+		String ids = "(" + cb.getFoodIDs().stream().map(integer -> "" + integer).collect(Collectors.joining(", ")) + ")";
 		nus.addAll(Database.getInstance().searchFood(ids));
+
+		nus.addAll(Database.getInstance().searchMeal(cb.getMealIDs()));
 
 		return nus;
 	}
@@ -105,7 +106,7 @@ public class Optimizer {
 			variableArray.addAll(Arrays.asList(variables));
 		}
 
-		public List<Integer> getFoodID() {
+		public List<Integer> getFoodIDs() {
 			return foodIDs;
 		}
 
@@ -140,7 +141,10 @@ public class Optimizer {
 					foodIDs.add(id);
 				}
 
-
+				if (v.getName().startsWith("MEAL") && value(v) > 0) {
+					int id = Integer.valueOf(v.getName().replace("MEAL", ""));
+					mealIDs.add(id);
+				}
 			}
 			solutionCount++;
 		}

@@ -15,6 +15,8 @@ public interface NutritionUnit {
 
 	double getCarbs();
 
+	double getSugar();
+
 	double getProtein();
 
 	int getId();
@@ -26,4 +28,5 @@ public interface NutritionUnit {
 	double getWeight();
 
 	double getPropose();
+
 }

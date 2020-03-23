@@ -27,8 +27,16 @@ public class Meal implements NutritionUnit {
 		foods.add(food);
 	}
 
+	public void addAllFood(List<Food> food) {
+		foods.addAll(food);
+	}
+
 	public double getCarbs() {
 		return portionize(foods.stream().reduce(0d, (sum, food) -> sum + food.getCarbs(), (d1, d2) -> d1 + d2));
+	}
+
+	public double getSugar() {
+		return portionize(foods.stream().reduce(0d, (sum, food) -> sum + food.getSugar(), (d1, d2) -> d1 + d2));
 	}
 
 	public double getFat() {
@@ -96,6 +104,7 @@ public class Meal implements NutritionUnit {
 				", fat=" + getFat() +
 				", protein=" + getProtein() +
 				", carbs=" + getCarbs() +
+				", sugar=" + getSugar() +
 				", dailyMax=" + dailyMax() +
 				", portion=" + portion +
 				", weight=" + getWeight() +
