@@ -25,8 +25,12 @@ public interface NutritionUnit {
 
 	double getServing();
 
+	double getPortion();
+
 	double getWeight();
 
 	double getPropose();
+
+	void setPropose(double propose);
 
 }

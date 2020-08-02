@@ -43,18 +43,25 @@
             <th>Sugar</th>
             <th>Protein</th>
             <th>Serving</th>
+            <th>Count</th>
         </tr>
         </thead>
-        <tr th:class="${nu.getType()}" th:each="nu: ${nus}">
-            <td th:text="${nu.id}"></td>
-            <td th:text="${nu.name}"></td>
-            <td th:text="${#numbers.formatDecimal(nu.kcal, 1, 1)}"></td>
-            <td th:text="${#numbers.formatDecimal(nu.fat, 1, 1)}"></td>
-            <td th:text="${#numbers.formatDecimal(nu.carbs, 1,1)}"></td>
-            <td th:text="${#numbers.formatDecimal(nu.sugar, 1,1)}"></td>
-            <td th:text="${#numbers.formatDecimal(nu.protein, 1, 1)}"></td>
-            <td th:text="${nu.serving}"></td>
-        </tr>
+        <th:block th:each="prop: ${nus}">
+            <tr>
+                <td>---- Meal ----</td>
+            </tr>
+            <tr th:class="${nu.getType()}" th:each="nu: ${prop.nus}">
+                <td th:text="${nu.id}"></td>
+                <td th:text="${nu.name}"></td>
+                <td th:text="${#numbers.formatDecimal(nu.kcal, 1, 1)}"></td>
+                <td th:text="${#numbers.formatDecimal(nu.fat, 1, 1)}"></td>
+                <td th:text="${#numbers.formatDecimal(nu.carbs, 1,1)}"></td>
+                <td th:text="${#numbers.formatDecimal(nu.sugar, 1,1)}"></td>
+                <td th:text="${#numbers.formatDecimal(nu.protein, 1, 1)}"></td>
+                <td th:text="${nu.serving}"></td>
+                <td th:text="${nu.serving / nu.portion}"></td>
+            </tr>
+        </th:block>
     </table>
 </div>
 <script>

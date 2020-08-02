@@ -3,6 +3,8 @@ package de.seibushin.nutrigo.proposer.database;/* ******************************
  * (2020-01-27)
  * ***************************************************/
 
+import org.springframework.context.annotation.Bean;
+
 public class Food implements NutritionUnit {
 	public int id;
 	public double fat;
@@ -13,6 +15,7 @@ public class Food implements NutritionUnit {
 	public String name;
 	public double dailyMax;
 	public double portion;
+	public double serving;
 	public double weight;
 	public double propose;
 	public boolean portionize = true;
@@ -26,6 +29,7 @@ public class Food implements NutritionUnit {
 		this.carbs = carbs;
 		this.sugar = sugar;
 		this.portion = portion;
+		this.serving = portion;
 		this.weight = weight;
 		this.dailyMax = dailyMax;
 		this.propose = propose;
@@ -60,10 +64,11 @@ public class Food implements NutritionUnit {
 
 	@Override
 	public double getServing() {
-		if (portionize) {
-			return portion;
-		}
-		return weight;
+		return serving;
+	}
+
+	public double getPortion() {
+		return portion;
 	}
 
 	@Override
@@ -74,6 +79,11 @@ public class Food implements NutritionUnit {
 	@Override
 	public double getPropose() {
 		return propose;
+	}
+
+	@Override
+	public void setPropose(double propose) {
+		this.propose = propose;
 	}
 
 	public double getKcal() {
@@ -92,7 +102,7 @@ public class Food implements NutritionUnit {
 
 	public double portionize(double val) {
 		if (portionize) {
-			return val * portion / weight;
+			return val * serving / weight;
 		}
 		return val;
 	}
@@ -109,6 +119,7 @@ public class Food implements NutritionUnit {
 				", carbs=" + getCarbs() +
 				", dailyMax=" + dailyMax +
 				", portion=" + portion +
+				", serving=" + serving +
 				", weight=" + weight +
 				'}';
 	}

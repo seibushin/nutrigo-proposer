@@ -29,16 +29,32 @@
         <tr th:each="food: ${foods}">
             <td th:text="${food.id}"></td>
             <td th:text="${food.name}"></td>
-            <td><input type="number" th:value="*{food.propose}"/></td>
+            <td>
+                <input th:onchange="'update(this, ' + ${food.id} + ')'" th:value="${food.propose}"/>
+            </td>
             <td th:text="${food.dailyMax}"></td>
             <td th:text="${#numbers.formatDecimal(food.kcal, 1, 1, 'POINT')}"></td>
             <td th:text="${#numbers.formatDecimal(food.fat, 1, 1, 'POINT')}"></td>
             <td th:text="${#numbers.formatDecimal(food.carbs, 1,1, 'POINT')}"></td>
             <td th:text="${#numbers.formatDecimal(food.protein, 1, 1, 'POINT')}"></td>
             <td th:text="${food.weight}"></td>
-            <td th:text="${food.serving}"></td>
+            <td th:text="${food.portion}"></td>
         </tr>
     </table>
+
+    <script>
+        function update(e, fid) {
+            console.log("update", fid, $(e).val());
+            $.post("updateFood",
+                {
+                    fid: fid,
+                    propose: $(e).val()
+                }),
+                function (res) {
+                    console.log("res", res);
+                }
+        }
+    </script>
 </div>
 </body>
 </html>

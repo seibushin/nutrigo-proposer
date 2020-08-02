@@ -12,6 +12,7 @@ public class Meal implements NutritionUnit {
 	public double dailyMax;
 	public double propose;
 	public double portion = 1;
+	public double serving = 1;
 	public double weight;
 	public List<Food> foods;
 	public boolean portionize = true;
@@ -59,10 +60,11 @@ public class Meal implements NutritionUnit {
 
 	@Override
 	public double getServing() {
-		if (portionize) {
-			return portionize(getWeight());
-		}
-		return 100;
+		return serving;
+	}
+
+	public double getPortion() {
+		return portion;
 	}
 
 	public double getKcal() {
@@ -70,12 +72,17 @@ public class Meal implements NutritionUnit {
 	}
 
 	public double getWeight() {
-		return foods.stream().reduce(0d, (sum, food) -> sum + food.portion, (d1, d2) -> d1 + d2);
+		return foods.stream().reduce(0d, (sum, food) -> sum + food.serving, (d1, d2) -> d1 + d2);
 	}
 
 	@Override
 	public double getPropose() {
 		return propose;
+	}
+
+	@Override
+	public void setPropose(double propose) {
+		this.propose = propose;
 	}
 
 	@Override
@@ -90,9 +97,9 @@ public class Meal implements NutritionUnit {
 
 	public double portionize(double val) {
 		if (portionize) {
-			return val;
+			return val * serving;
 		}
-		return val * 100 / getWeight();
+		return val;
 	}
 
 	@Override

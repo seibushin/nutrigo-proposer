@@ -5,7 +5,6 @@
 package de.seibushin.nutrigo.proposer.optimizer;
 
 import de.seibushin.nutrigo.proposer.database.Database;
-import de.seibushin.nutrigo.proposer.database.NutritionUnit;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class Test {
 		Optimizer opt = new Optimizer();
 		opt.nus.addAll(Database.getInstance().getFoods(false));
 		opt.nus.addAll(Database.getInstance().getMeals(false));
-		List<NutritionUnit> nus = opt.optimize();
+		List<NuPropose> nus = opt.optimize();
 		System.out.println(nus.size());
 	}
 }

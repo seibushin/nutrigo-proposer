@@ -8,13 +8,11 @@ import com.google.ortools.sat.CpSolver;
 import com.google.ortools.sat.CpSolverSolutionCallback;
 import com.google.ortools.sat.IntVar;
 import com.google.ortools.sat.LinearExpr;
-import de.seibushin.nutrigo.proposer.database.Database;
 import de.seibushin.nutrigo.proposer.database.NutritionUnit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Optimizer {
 	static {
@@ -44,7 +42,7 @@ public class Optimizer {
 		this.proteinmax = (int) (protein * 1.1);
 	}
 
-	public List<NutritionUnit> optimize() {
+	public List<NuPropose> optimize() {
 		System.out.println("KCAL: " + kcalmin + " - " + kcalmax);
 		System.out.println("FAT: " + fatmin + " - " + fatmax);
 		System.out.println("CARBS: " + carbsmin + " - " + carbsmax);
@@ -61,7 +59,7 @@ public class Optimizer {
 		IntVar[] used = new IntVar[nus.size()];
 		for (int i = 0; i < nus.size(); i++) {
 			NutritionUnit nu = nus.get(i);
-			used[i] = model.newIntVar(0, (int) Math.ceil(nu.getPropose()), nu.getType() + nu.getId());
+			used[i] = model.newIntVar(0, nu.getPropose() > 0 ? Math.max(1, (int) Math.floor(nu.getPropose())) : 0, nu.getType() + nu.getId());
 		}
 
 		model.addEquality(fat, LinearExpr.scalProd(used, nus.stream().mapToInt(f -> (int) (f.getFat() * 10)).toArray()));
@@ -85,43 +83,30 @@ public class Optimizer {
 		Callback cb = new Callback(used, fat, carbs, protein, kcal);
 		solver.searchAllSolutions(model, cb);
 
-		List<NutritionUnit> nus = new ArrayList<>();
-
-		String ids = "(" + cb.getFoodIDs().stream().map(integer -> "" + integer).collect(Collectors.joining(", ")) + ")";
-		nus.addAll(Database.getInstance().searchFood(ids));
-
-		nus.addAll(Database.getInstance().searchMeal(cb.getMealIDs()));
-
-		return nus;
+		return cb.getProposed();
 	}
 
 	static class Callback extends CpSolverSolutionCallback {
 		private int solutionCount;
 		private final List<IntVar> variableArray = new ArrayList<>();
-		private final List<Integer> foodIDs = new ArrayList<>();
-		private final List<Integer> mealIDs = new ArrayList<>();
 
 		public Callback(IntVar[] foods, IntVar... variables) {
 			variableArray.addAll(Arrays.asList(foods));
 			variableArray.addAll(Arrays.asList(variables));
 		}
 
-		public List<Integer> getFoodIDs() {
-			return foodIDs;
-		}
+		public final List<NuPropose> proposed = new ArrayList<>();
 
-		public List<Integer> getMealIDs() {
-			return mealIDs;
+		public List<NuPropose> getProposed() {
+			return proposed;
 		}
 
 		@Override
 		public void onSolutionCallback() {
 			System.out.printf("Solution #%d: time = %.02f s%n", solutionCount, wallTime());
-			if (solutionCount > 10) {
-				stopSearch();
-			}
-			for (IntVar v : variableArray) {
+			NuPropose propose = new NuPropose();
 
+			for (IntVar v : variableArray) {
 				switch (v.getName()) {
 					case "fat":
 					case "carbs":
@@ -138,15 +123,19 @@ public class Optimizer {
 
 				if (v.getName().startsWith("FOOD") && value(v) > 0) {
 					int id = Integer.valueOf(v.getName().replace("FOOD", ""));
-					foodIDs.add(id);
+					propose.foodIDs.add(new Propose(id, (int) value(v)));
 				}
 
 				if (v.getName().startsWith("MEAL") && value(v) > 0) {
 					int id = Integer.valueOf(v.getName().replace("MEAL", ""));
-					mealIDs.add(id);
+					propose.mealIDs.add(new Propose(id, (int) value(v)));
 				}
 			}
+			proposed.add(propose);
 			solutionCount++;
+			if (solutionCount > 10) {
+				stopSearch();
+			}
 		}
 
 		public int getSolutionCount() {

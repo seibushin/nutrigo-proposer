@@ -20,7 +20,7 @@
             <td th:text="${#numbers.formatDecimal(food.fat, 1, 1, 'POINT')}">name</td>
             <td th:text="${#numbers.formatDecimal(food.carbs, 1,1, 'POINT')}">name</td>
             <td th:text="${#numbers.formatDecimal(food.protein, 1, 1, 'POINT')}">name</td>
-            <td th:text="${food.serving}">name</td>
+            <td th:text="${food.portion}">name</td>
         </tr>
     </th:block>
     </tbody>

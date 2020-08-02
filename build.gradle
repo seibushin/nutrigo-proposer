@@ -6,7 +6,7 @@ plugins {
 
 group = 'de.seibushin.nutrigo'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '8'
+sourceCompatibility = '14'
 
 repositories {
     mavenCentral()
@@ -41,7 +41,7 @@ dependencies {
     compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.8.11.2'
 
     // only for development
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    compile 'org.springframework.boot:spring-boot-devtools'
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
